@@ -1,0 +1,30 @@
+replicaCount: 1
+
+image:
+  repository: gcr.io/jjrawlins/python-k8s-demo-hello-world-container
+  tag: "0.0.1"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  hosts:
+    - host: "python-hello-world.localhost"
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: python-hello-world-tls
+      hosts:
+        - python-hello-world.localhost
+
+resources: {}
+nodeSelector: {}
+affinity: {}
+tolerations: []
